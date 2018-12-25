@@ -1,0 +1,40 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Spotify Web Playback SDK Quick Start Tutorial</title>
+</head>
+<body>
+    <h1>Spotify Web Playback SDK Quick Start Tutorial</h1>
+    <h2>Open your console log: <code>View > Developer > JavaScript Console</code></h2>
+    <script src="https://sdk.scdn.co/spotify-player.js"></script>
+    <script>
+        window.onSpotifyWebPlaybackSDKReady = () => {
+            const token = 'ReplaceToken'
+            //const token = 'BQC82lcjx9LDacrEDNwx0Tr-SdgYlpJQxJY2FQObt8X3IwDtvp45532Pov83z4VZ1DqxOjqd1k8Ch5fmvevX5-lE4yf-_dChPy1lgZoQAgE0zOtaaTVt4623BJ7uXvgWNxTPyiUwWR9if0nXdAQYi8HOeDCAhMjoNT7uO-f43iYI1wlG';
+            const player = new Spotify.Player({
+                name: 'Duckify',
+                getOAuthToken: cb => { cb(token); }
+        });
+
+        // Error handling
+        player.addListener('initialization_error', ({ message }) => { console.error(message); console.warn(1); });
+        player.addListener('authentication_error', ({ message }) => { console.error(message); console.warn(2); });
+        player.addListener('account_error', ({ message }) => { console.error(message); console.warn(3); });
+        player.addListener('playback_error', ({ message }) => { console.error(message); console.warn(4); });
+        // Playback status updates
+        player.addListener('player_state_changed', state => { console.log(state); });
+        // Ready
+        player.addListener('ready', ({ device_id }) => {
+            console.log('Ready with Device ID', device_id);
+        });
+        // Not Ready
+        player.addListener('not_ready', ({ device_id }) => {
+            console.log('Device ID has gone offline', device_id);
+        });
+        // Connect to the player!
+        player.connect();
+        };
+    </script>
+    <!-- We will insert our code here. -->
+</body>
+</html>
