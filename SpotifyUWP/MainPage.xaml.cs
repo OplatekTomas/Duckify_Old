@@ -20,6 +20,12 @@ using System.Threading.Tasks;
 using Windows.UI.Core;
 using Windows.UI.Popups;
 using Windows.Storage;
+using SpotifyAPI.Web;
+using Windows.ApplicationModel.Activation;
+using System.Reflection;
+using Windows.UI.ViewManagement;
+using Windows.UI;
+using Windows.UI.Xaml.Media.Imaging;
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
 namespace SpotifyUWP
@@ -33,25 +39,104 @@ namespace SpotifyUWP
             this.InitializeComponent();
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e) {
+
+        private void Page_Loaded(object sender, RoutedEventArgs e) {
             var handle = new EventHandler<SpotifyLogin.SpotifyLoginEventArgs>(async (s, ev) => {
-                MessageDialog dialog = new MessageDialog("Player running");
+                Spotify.InitClient(ev.TokenInfo);
+                await RegisterPlayer(ev.TokenInfo.Access_token);
                 await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () => {
-                    await RegisterPlayer(ev.TokenInfo.Access_token);
-                    await dialog.ShowAsync();
-                    MainFrame.Navigate(typeof(EmptyPage));
+                    await LoadUI();
                 });
+                Server.Init();
+
             });
-            MainFrame.Navigate(typeof(SpotifyLogin), handle);
+            Navigation.IsEnabled = false;
+            ContentFrame.Navigate(typeof(SpotifyLogin), handle);
+
         }
 
+        private async Task LoadUI() {
+            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () => {
+                ContentFrame.Navigate(typeof(QueuePlayer));
+                ContentFrame.BackStack.Clear();
+                Navigation.IsEnabled = true;
+                await RefreshView();
+                Queue.SongChanged += async (s1, ev1) => {
+                    await Task.Delay(3000);
+                    await RefreshView();
+                };
+            });
+        }
+
+
+        private async Task RefreshView() {
+            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => {
+                if(Queue.CurrentSong.Item != null) {
+                    SongName.Text = Queue.CurrentSong.Item.Name;
+                    ArtistNames.Text = Helper.BuildListString(Queue.CurrentSong.Item.Artists.Select(x => x.Name));
+                    CoverArt.Source = new BitmapImage(new Uri(Queue.CurrentSong.Item.Album.Images[0].Url));
+                }
+
+            });
+
+        }
+
+
         private async Task RegisterPlayer(string token) {
-            var str = File.ReadAllText(Helper.Assets+"\\SpotifyPlayer.html");
-            str = str.Replace("ReplaceToken", token);
-            Directory.CreateDirectory(Helper.Temp + "\\Web");
-            File.WriteAllText(Helper.Temp + "\\Web\\SpotifyPlayer.html", str);
-            SpotifyPlayer.Navigate(new Uri("ms-appdata:///temp/Web/SpotifyPlayer.html"));
+            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () => {
+                var str = File.ReadAllText(Helper.Assets + "\\SpotifyPlayer.html");
+                str = str.Replace("ReplaceToken", token);
+                Directory.CreateDirectory(Helper.Temp + "\\Web");
+                File.WriteAllText(Helper.Temp + "\\Web\\SpotifyPlayer.html", str);
+                SpotifyClientBackground.Navigate(new Uri("ms-appdata:///temp/Web/SpotifyPlayer.html"));
+            });
+            //Local function that switches spotify to play in this application
+            async Task function() {
+                Device device = null;
+                while (device == null) {
+                    await Task.Delay(500);
+                    AvailabeDevices devices = await Spotify.Client.GetDevicesAsync();
+                    device = devices.Devices.FirstOrDefault(x => x.Name == "Duckify");
+                }
+                await Spotify.Client.TransferPlaybackAsync(device.Id);
+                Spotify.DeviceId = device.Id;
+            }
+            Task.Run(function);
+
+
+        }
+
+
+        private Dictionary<string, Type> _pages = null;
+        
+        private Dictionary<string, Type> GeneratePages() {
+            string name = Assembly.GetExecutingAssembly().GetName().Name;
+            Dictionary<string, Type> pages = new Dictionary<string, Type>();
+            foreach(NavigationViewItem item in Navigation.MenuItems) {
+                pages.Add((string)item.Tag, Type.GetType(name + "." + item.Tag));
+            }
+            return pages;
+        }
+
+        private void Navigation_ItemInvoked(NavigationView sender, NavigationViewItemInvokedEventArgs args) {
+            if(_pages == null) {
+                _pages = GeneratePages();
+            }
+            Type pageType = args.IsSettingsInvoked ? null : _pages[(string)args.InvokedItemContainer.Tag];
+            if (pageType == null) {
+                pageType = typeof(ComingSoon);
+            }
+            ContentFrame.Navigate(pageType, null, args.RecommendedNavigationTransitionInfo);
+        }
+
+
+
+        private void Navigation_BackRequested(NavigationView sender, NavigationViewBackRequestedEventArgs args) {
+            if (ContentFrame.CanGoBack) {
+                ContentFrame.GoBack();
+            }
         }
 
     }
+    
 }

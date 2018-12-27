@@ -5,16 +5,57 @@
     xmlns:local="using:SpotifyUWP"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:Windows10version1809="http://schemas.microsoft.com/winfx/2006/xaml/presentation?IsApiContractPresent(Windows.Foundation.UniversalApiContract, 7)"
+    xmlns:Windows10version1803="http://schemas.microsoft.com/winfx/2006/xaml/presentation?IsApiContractPresent(Windows.Foundation.UniversalApiContract, 6)"
     mc:Ignorable="d"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Loaded="Page_Loaded" >
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="50px"/>
-            <RowDefinition Height="1*"/>
-        </Grid.RowDefinitions>
-        <Button Content="Login" VerticalAlignment="Top" HorizontalAlignment="Left" Click="Button_Click"/>
-        <Frame Grid.Row="1" x:Name="MainFrame" Background="Black" />
-        <WebView x:Name="SpotifyPlayer" Visibility="Collapsed" Grid.Row="1" /> 
+        <NavigationView OpenPaneLength="250" x:Name="Navigation" Windows10version1803:IsBackEnabled="True" Windows10version1803:IsBackButtonVisible="Auto" ItemInvoked="Navigation_ItemInvoked" Windows10version1803:BackRequested="Navigation_BackRequested">
+            <NavigationView.MenuItems>
+                <NavigationViewItem Icon="Zoom" Content="Search" Tag="Search" />
+                <NavigationViewItem Icon="MusicInfo" Content="Queue" Tag="QueuePlayer" />
+                <NavigationViewItem Icon="People" Content="Clients (coming soon)" Tag="Clients" />
+                <NavigationViewItem Icon="World" Content="Stats (coming soon)" Tag="Stats" />
+                <NavigationViewItem Icon="Contact" Content="User (coming soon)" Tag="Users"  />
+            </NavigationView.MenuItems>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="50" />
+                    <RowDefinition />
+                    <RowDefinition Height="120" />
+                </Grid.RowDefinitions>
+                <Frame Name="ContentFrame" Grid.Row="1" />
+                <Grid Grid.Row="2">
+                    <Rectangle Fill="{ThemeResource SystemControlAcrylicElementBrush}" Grid.ColumnSpan="2" />
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="120"/>
+                            <ColumnDefinition Width="1*"/>
+                        </Grid.ColumnDefinitions>
+                        <Image x:Name="CoverArt" />
+                        <Grid Grid.Column="1">
+                            <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center" Margin="15,0,0,0">
+                                    <TextBlock x:Name="SongName" FontSize="18" />
+                                    <TextBlock  x:Name="ArtistNames" FontSize="14" Opacity="0.50" />
+                                </StackPanel>
+                            </Grid>
+                        <Grid Grid.Column="1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="32"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid>
+
+                            </Grid>
+                            <Grid Grid.Column="1">
+                            </Grid>
+                        </Grid>
+                    </Grid>
+
+                </Grid>
+            </Grid>
+        </NavigationView>
+        <WebView x:Name="SpotifyClientBackground" Visibility="Collapsed" />
+
     </Grid>
 </Page>
