@@ -34,24 +34,41 @@
                         </Grid.ColumnDefinitions>
                         <Image x:Name="CoverArt" />
                         <Grid Grid.Column="1">
-                            <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center" Margin="15,0,0,0">
-                                    <TextBlock x:Name="SongName" FontSize="18" />
-                                    <TextBlock  x:Name="ArtistNames" FontSize="14" Opacity="0.50" />
-                                </StackPanel>
-                            </Grid>
-                        <Grid Grid.Column="1">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="1*"/>
-                                <ColumnDefinition Width="32"/>
+                                <ColumnDefinition Width="210"/>
+                                <ColumnDefinition Width="1*"/>
                             </Grid.ColumnDefinitions>
-                            <Grid>
+                            <StackPanel HorizontalAlignment="Left" VerticalAlignment="Top" Margin="15,15,0,0">
+                                <TextBlock x:Name="SongName" Text="Super fucking long name of a song that is probably featuring lot of cunts" FontSize="18" TextTrimming="CharacterEllipsis" />
+                                <TextBlock x:Name="ArtistNames" Text="Here is the original artist and all the cunts" FontSize="14" Opacity="0.50" TextTrimming="CharacterEllipsis" />
+                            </StackPanel>
+                            <Grid Grid.Column="1" HorizontalAlignment="Center">
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="-100,25,0,0">
+                                    <Button Background="Transparent" x:Name="ForcePlayer" ToolTipService.ToolTip="Fix player">
+                                        <SymbolIcon Symbol="Audio" />
+                                    </Button>
+                                    <Button Background="Transparent" x:Name="PlayButton" Click="PlayButton_Click" ToolTipService.ToolTip="Play/Pause">
+                                        <SymbolIcon Symbol="Pause" x:Name="PlayButtonIcon" />
+                                    </Button>
+                                    <Button Background="Transparent" x:Name="SkipButton" Click="SkipButton_Click" ToolTipService.ToolTip="Skip">
+                                        <SymbolIcon Symbol="Next" />
+                                    </Button>
+                                </StackPanel>
 
                             </Grid>
-                            <Grid Grid.Column="1">
+                            <Grid VerticalAlignment="Bottom"  Margin="15,5" Grid.ColumnSpan="3">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="50" />
+                                    <ColumnDefinition Width="1*" />
+                                    <ColumnDefinition Width="50" />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock x:Name="CurrentTime" Text="3:59" VerticalAlignment="Center" Margin="0,0,0,7" />
+                                <Slider Grid.Column="1" Style="{StaticResource MediaSlider}" VerticalAlignment="Center" x:Name="SongProgressSlider" />
+                                <TextBlock x:Name="SongLen" Grid.Column="2" Text="3:59" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,0,7" />
                             </Grid>
                         </Grid>
                     </Grid>
-
                 </Grid>
             </Grid>
         </NavigationView>

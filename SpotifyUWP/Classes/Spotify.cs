@@ -32,9 +32,11 @@ namespace SpotifyUWP {
 
         private static Timer _refreshCurrentSongTimer = new Timer(200);
 
-        public static string  DeviceId { get; set; }
-
         #endregion
+
+        public async static Task<Device> GetDevice() {
+            return (await Spotify.Client.GetDevicesAsync()).Devices.FirstOrDefault(x => x.Name == "Duckify");
+        }
 
         public static void InitClient(TokenInfo token) {
             AccessToken = token;
@@ -75,7 +77,7 @@ namespace SpotifyUWP {
         private static int updateCount = 0;
 
         private static async Task UpdateData() {
-            await Task.Run(() => {
+            await Task.Run(async () => {
                 updateCount++;
                 //This method runs every 200ms, 200*15 = 3000?;
                 if (updateCount % 15 == 0) {
@@ -83,9 +85,9 @@ namespace SpotifyUWP {
                 }
                 if(Queue.CurrentSong != null && Queue.CurrentSong.Item != null) {
                     if (Queue.CurrentSong.IsPlaying) {
-                        Queue.CurrentSong.ProgressMs += 100;
+                        Queue.CurrentSong.ProgressMs += 200;
                         if ((Queue.CurrentSong.Item.DurationMs - Queue.CurrentSong.ProgressMs) < 1000) {
-                            Queue.SongChanged?.Invoke(Queue.CurrentSong.Item.Name, new EventArgs());
+                            await Queue.Next();
                         }
                     }
                 }             

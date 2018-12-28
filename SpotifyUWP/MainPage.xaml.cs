@@ -26,6 +26,7 @@ using System.Reflection;
 using Windows.UI.ViewManagement;
 using Windows.UI;
 using Windows.UI.Xaml.Media.Imaging;
+using System.Timers;
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
 namespace SpotifyUWP
@@ -55,35 +56,50 @@ namespace SpotifyUWP
 
         }
 
+
+        private Timer _uiRefresh;
         private async Task LoadUI() {
             await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () => {
                 ContentFrame.Navigate(typeof(QueuePlayer));
                 ContentFrame.BackStack.Clear();
                 Navigation.IsEnabled = true;
                 await RefreshView();
-                Queue.SongChanged += async (s1, ev1) => {
-                    await Task.Delay(3000);
-                    await RefreshView();
-                };
+                _uiRefresh = new Timer(500);
+                _uiRefresh.Elapsed += async (s, ev) => await RefreshView();
+                _uiRefresh.Start();                
             });
         }
 
-
+        /// <summary>
+        /// Refreshes the player on the bottom of the page.
+        /// </summary>
+        private PlaybackContext _previous = new PlaybackContext();
         private async Task RefreshView() {
+            if(_previous.Item?.Id != Queue.CurrentSong.Item?.Id) {
+                _previous.Item = Queue.CurrentSong.Item;
+                await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => {
+                    if (Queue.CurrentSong.Item != null) {
+                        CoverArt.Source = new BitmapImage(new Uri(Queue.CurrentSong.Item.Album.Images[0].Url));
+                        SongName.Text = Queue.CurrentSong.Item.Name;
+                        ArtistNames.Text = Helper.BuildListString(Queue.CurrentSong.Item.Artists.Select(x => x.Name));
+                        SongProgressSlider.Maximum = Queue.CurrentSong.Item.DurationMs;
+                        SongLen.Text = Helper.ConvertMsToReadable(Queue.CurrentSong.Item.DurationMs);
+                    }
+                });
+            }
+            //always udpate stuff like timer and positoin
             await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => {
                 if(Queue.CurrentSong.Item != null) {
-                    SongName.Text = Queue.CurrentSong.Item.Name;
-                    ArtistNames.Text = Helper.BuildListString(Queue.CurrentSong.Item.Artists.Select(x => x.Name));
-                    CoverArt.Source = new BitmapImage(new Uri(Queue.CurrentSong.Item.Album.Images[0].Url));
+                    SongProgressSlider.Value = Queue.CurrentSong.ProgressMs;
+                    CurrentTime.Text = Helper.ConvertMsToReadable(Queue.CurrentSong.ProgressMs);
                 }
-
             });
 
         }
 
 
         private async Task RegisterPlayer(string token) {
-            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () => {
+            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => {
                 var str = File.ReadAllText(Helper.Assets + "\\SpotifyPlayer.html");
                 str = str.Replace("ReplaceToken", token);
                 Directory.CreateDirectory(Helper.Temp + "\\Web");
@@ -99,7 +115,7 @@ namespace SpotifyUWP
                     device = devices.Devices.FirstOrDefault(x => x.Name == "Duckify");
                 }
                 await Spotify.Client.TransferPlaybackAsync(device.Id);
-                Spotify.DeviceId = device.Id;
+                
             }
             Task.Run(function);
 
@@ -137,6 +153,22 @@ namespace SpotifyUWP
             }
         }
 
+        private async void PlayButton_Click(object sender, RoutedEventArgs e) {
+            var device = await Spotify.GetDevice();
+            if (Queue.CurrentSong.IsPlaying) {
+                await Spotify.Client.PausePlaybackAsync(device.Id);
+                PlayButtonIcon.Symbol = Symbol.Play;
+                Queue.CurrentSong.IsPlaying = false;
+            } else {
+                await Spotify.Client.ResumePlaybackAsync(device.Id, "", new List<string>() { Queue.CurrentSong.Item.Uri }, 0, Queue.CurrentSong.ProgressMs);
+                Queue.CurrentSong.IsPlaying = true;
+                PlayButtonIcon.Symbol = Symbol.Pause;
+            }
+        }
+
+        private void SkipButton_Click(object sender, RoutedEventArgs e) {
+            Queue.Next();
+        }
     }
     
 }

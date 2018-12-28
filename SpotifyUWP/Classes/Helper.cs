@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.Storage;
@@ -23,7 +24,7 @@ namespace SpotifyUWP {
 
         public static string BuildListString(IEnumerable<string> items) {
             var result = "";
-            foreach(var item in items) {
+            foreach (var item in items) {
                 result += item + ", ";
             }
             return result.Remove(result.Length - 2, 2);
@@ -31,6 +32,11 @@ namespace SpotifyUWP {
 
         public static string GetMyIPString() {
             return GetMyIP().ToString();
+        }
+
+        public static string ConvertMsToReadable(double ms) {
+            TimeSpan ts = TimeSpan.FromMilliseconds(ms);
+            return ts.ToString(@"mm\:ss");
         }
 
 
@@ -42,6 +48,22 @@ namespace SpotifyUWP {
                 localIP = endPoint.Address;
             }
             return localIP;
+        }
+
+
+        public static T ConvertType<T>(object obj) {
+            Type origType = obj.GetType();
+            Type newType = typeof(T);
+            var origProps = origType.GetProperties(BindingFlags.Instance | BindingFlags.Public);
+            var newProps = newType.GetProperties(BindingFlags.Instance | BindingFlags.Public);
+            var same = origProps.Intersect(newProps).ToList();
+            var res = origProps.Select(x => (x.Name, x.PropertyType)).ToDictionary(x => x.Name, x => x.PropertyType)
+                .Intersect(newProps.Select(x => (x.Name, x.PropertyType)).ToDictionary(x => x.Name, x => x.PropertyType)).ToDictionary(x => x.Key, x => x.Value);
+            var newObj = Activator.CreateInstance(typeof(T));
+            foreach (var item in res) {
+                newProps.First(x => x.Name == item.Key).SetValue(newObj, origProps.First(x => x.Name == item.Key).GetValue(obj));
+            }
+            return (T)newObj;
         }
     }
 }
