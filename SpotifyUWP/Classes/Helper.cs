@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using Windows.Storage;
 using Windows.UI.Xaml.Media.Imaging;
 
-namespace SpotifyUWP {
+namespace Duckify {
     public static class Helper {
 
         public static readonly string Assets = GetAssets().Result;
@@ -50,7 +50,13 @@ namespace SpotifyUWP {
             return localIP;
         }
 
-
+        /// <summary>
+        /// Tries to convert any single type to any single other type by comparing its properties.
+        /// Takes properties with same name and assings their values
+        /// </summary>
+        /// <typeparam name="T">Type to convert to.</typeparam>
+        /// <param name="obj">Object of type to convert from</param>
+        /// <returns>New object of type T</returns>
         public static T ConvertType<T>(object obj) {
             Type origType = obj.GetType();
             Type newType = typeof(T);

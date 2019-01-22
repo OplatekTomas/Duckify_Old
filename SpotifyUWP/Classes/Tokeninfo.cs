@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SpotifyUWP
+namespace Duckify
 {
     public partial class Spotify {
         public class TokenInfo {

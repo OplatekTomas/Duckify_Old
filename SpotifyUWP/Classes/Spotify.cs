@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
 
-namespace SpotifyUWP {
+namespace Duckify {
     public partial class Spotify {
 
         #region Variables

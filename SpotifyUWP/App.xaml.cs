@@ -18,7 +18,7 @@ using Windows.UI.Xaml.Navigation;
 using Windows.UI.ViewManagement;
 using Windows.UI;
 
-namespace SpotifyUWP
+namespace Duckify
 {
     /// <summary>
     /// Provides application-specific behavior to supplement the default Application class.

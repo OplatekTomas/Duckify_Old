@@ -6,7 +6,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SpotifyUWP {
+namespace Duckify {
     public partial class Spotify {
         public class Auth {
 

@@ -27,9 +27,11 @@ using Windows.UI.ViewManagement;
 using Windows.UI;
 using Windows.UI.Xaml.Media.Imaging;
 using System.Timers;
+using Windows.UI.Xaml.Media.Animation;
+using Microsoft.Toolkit.Uwp.UI.Animations;
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
-namespace SpotifyUWP
+namespace Duckify
 {
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
@@ -60,6 +62,7 @@ namespace SpotifyUWP
         private Timer _uiRefresh;
         private async Task LoadUI() {
             await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () => {
+                AnimationExtensions.Fade(BottomNavigation, 1).StartAsync();
                 ContentFrame.Navigate(typeof(QueuePlayer));
                 ContentFrame.BackStack.Clear();
                 Navigation.IsEnabled = true;

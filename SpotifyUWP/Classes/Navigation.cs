@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
-namespace SpotifyUWP{
+namespace Duckify{
     class Navigation {
 
         private static Frame _view = Init();

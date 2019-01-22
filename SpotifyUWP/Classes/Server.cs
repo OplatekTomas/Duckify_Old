@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using HttpListener = System.Net.Http.HttpListener;
 
-namespace SpotifyUWP{
+namespace Duckify{
     class Server{
         public static HttpListener Listener;
 

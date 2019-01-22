@@ -1,14 +1,17 @@
 ﻿<Page
-    x:Class="SpotifyUWP.MainPage"
+    x:Class="Duckify.MainPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:SpotifyUWP"
+    xmlns:local="using:Duckify"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:Windows10version1809="http://schemas.microsoft.com/winfx/2006/xaml/presentation?IsApiContractPresent(Windows.Foundation.UniversalApiContract, 7)"
     xmlns:Windows10version1803="http://schemas.microsoft.com/winfx/2006/xaml/presentation?IsApiContractPresent(Windows.Foundation.UniversalApiContract, 6)"
     mc:Ignorable="d"
-    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Loaded="Page_Loaded" >
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Loaded="Page_Loaded"
+     xmlns:interactivity="using:Microsoft.Xaml.Interactivity"  
+    xmlns:behaviors="using:Microsoft.Toolkit.Uwp.UI.Animations.Behaviors"
+    >
     <Grid>
         <NavigationView OpenPaneLength="250" x:Name="Navigation" Windows10version1803:IsBackEnabled="True" Windows10version1803:IsBackButtonVisible="Auto" ItemInvoked="Navigation_ItemInvoked" Windows10version1803:BackRequested="Navigation_BackRequested">
             <NavigationView.MenuItems>
@@ -20,19 +23,19 @@
             </NavigationView.MenuItems>
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="50" />
+                    <RowDefinition Height="0" />
                     <RowDefinition />
                     <RowDefinition Height="120" />
                 </Grid.RowDefinitions>
                 <Frame Name="ContentFrame" Grid.Row="1" />
                 <Grid Grid.Row="2">
                     <Rectangle Fill="{ThemeResource SystemControlAcrylicElementBrush}" Grid.ColumnSpan="2" />
-                    <Grid>
+                    <Grid  x:Name="BottomNavigation" Opacity="0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="120"/>
                             <ColumnDefinition Width="1*"/>
                         </Grid.ColumnDefinitions>
-                        <Image x:Name="CoverArt" />
+                        <Image x:Name="CoverArt" Source="/Assets/IconHighResWithBackground.png" />
                         <Grid Grid.Column="1">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="1*"/>
@@ -40,8 +43,8 @@
                                 <ColumnDefinition Width="1*"/>
                             </Grid.ColumnDefinitions>
                             <StackPanel HorizontalAlignment="Left" VerticalAlignment="Top" Margin="15,15,0,0">
-                                <TextBlock x:Name="SongName" Text="Super fucking long name of a song that is probably featuring lot of cunts" FontSize="18" TextTrimming="CharacterEllipsis" />
-                                <TextBlock x:Name="ArtistNames" Text="Here is the original artist and all the cunts" FontSize="14" Opacity="0.50" TextTrimming="CharacterEllipsis" />
+                                <TextBlock x:Name="SongName"  FontSize="18" TextTrimming="CharacterEllipsis" />
+                                <TextBlock x:Name="ArtistNames" FontSize="14" Opacity="0.50" TextTrimming="CharacterEllipsis" />
                             </StackPanel>
                             <Grid Grid.Column="1" HorizontalAlignment="Center">
                                 <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="-100,25,0,0">
@@ -63,9 +66,9 @@
                                     <ColumnDefinition Width="1*" />
                                     <ColumnDefinition Width="50" />
                                 </Grid.ColumnDefinitions>
-                                <TextBlock x:Name="CurrentTime" Text="3:59" VerticalAlignment="Center" Margin="0,0,0,7" />
+                                <TextBlock x:Name="CurrentTime" Text="" VerticalAlignment="Center" Margin="0,0,0,7" />
                                 <Slider Grid.Column="1" Style="{StaticResource MediaSlider}" VerticalAlignment="Center" x:Name="SongProgressSlider" />
-                                <TextBlock x:Name="SongLen" Grid.Column="2" Text="3:59" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,0,7" />
+                                <TextBlock x:Name="SongLen" Grid.Column="2" Text="" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,0,7" />
                             </Grid>
                         </Grid>
                     </Grid>
