@@ -103,7 +103,7 @@ namespace Duckify
 
         private async Task RegisterPlayer(string token) {
             await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => {
-                var str = File.ReadAllText(Helper.Assets + "\\SpotifyPlayer.html");
+                var str = File.ReadAllText(Helper.AssetsWeb + "\\SpotifyPlayer.html");
                 str = str.Replace("ReplaceToken", token);
                 Directory.CreateDirectory(Helper.Temp + "\\Web");
                 File.WriteAllText(Helper.Temp + "\\Web\\SpotifyPlayer.html", str);

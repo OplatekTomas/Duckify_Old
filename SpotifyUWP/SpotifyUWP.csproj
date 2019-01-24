@@ -97,8 +97,10 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Classes\API.cs" />
     <Compile Include="Classes\Auth.cs" />
     <Compile Include="Classes\Helper.cs" />
+    <Compile Include="Classes\MimeHelper.cs" />
     <Compile Include="Classes\Navigation.cs" />
     <Compile Include="Classes\Queue.cs" />
     <Compile Include="Classes\Server.cs" />
@@ -133,6 +135,7 @@
   <ItemGroup>
     <Content Include="Assets\IconHighRes.png" />
     <Content Include="Assets\IconHighResWithBackground.png" />
+    <Content Include="Assets\Web\index\index.html" />
     <Content Include="Assets\Web\SpotifyPlayer.html" />
     <Content Include="Properties\Default.rd.xml" />
     <Content Include="Assets\LockScreenLogo.scale-200.png" />

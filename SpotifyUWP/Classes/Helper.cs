@@ -12,7 +12,7 @@ using Windows.UI.Xaml.Media.Imaging;
 namespace Duckify {
     public static class Helper {
 
-        public static readonly string Assets = GetAssets().Result;
+        public static readonly string AssetsWeb = GetAssets().Result;
         public static readonly string Temp = ApplicationData.Current.TemporaryFolder.Path;
 
         private async static Task<string> GetAssets() => (await Windows.ApplicationModel.Package.Current.InstalledLocation.GetFolderAsync(@"Assets\Web")).Path;
