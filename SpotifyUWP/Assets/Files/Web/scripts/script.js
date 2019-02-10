@@ -5,8 +5,8 @@ function init() {
 
 function sendRequest() {
     console.log("send req");
-    $.getJSON('http://192.168.1.83:5850/api/queue', function (data) {
-        $("#tableBod tr").remove();
+    $.getJSON('/api/queue', function (data) {
+        document.getElementById("tableBod").innerHTML = "";
         generateTable(data);
     });
 }
@@ -14,12 +14,12 @@ function sendRequest() {
 //Yes. It's ugly.
 function generateTable(data) {
     data.forEach(element => {
-        var table = document.getElementById("contentTable");
+        var table = document.getElementById("tableBod");
         var row = table.insertRow(-1);
         //create cell at index 0
         var coverCell = row.insertCell(0);
         coverCell.setAttribute("class", "align-middle");
-        coverCell.innerHTML = "<img height='64px' width='64px' src='" + element.coverUrl + "'></img>";
+        coverCell.innerHTML = "<img height='64px' width='64px' src='" + element.coverUrl + "' />";
         //create cell at index 1
         var infoCell = row.insertCell(1);
         infoCell.setAttribute("class", "align-middle demo");
@@ -38,6 +38,8 @@ function generateTable(data) {
             sendLike(element.songId)
         }
         coverCell.appendChild(btn);
+
+
     });
 
 }

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
 
@@ -16,21 +16,22 @@
     <!-- Latest compiled JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"></script>
 
-    <script src="scripts/script.js"></script>
     <link rel="stylesheet" href="css/style.css">
+
+    <script src="scripts/script.js"></script>
+
 </head>
 
 <body onload="init()">
     <nav class="navbar navbar-dark bg-dark">
         <div class="navbar-header">
             <a class="navbar-brand" href="">
-                <img src="img/logo.png" width="30" height="30" class="d-inline-block align-top"></img>
+                <img src="img/logo.png" width="30" height="30" class="d-inline-block align-top" alt="" />
             </a>
         </div>
         <form class="form-inline navbar-form">
             <div class="input-group">
-                <input type="text" class="form-control" placeholder="Search songs" aria-label="Search songs"
-                    aria-describedby="basic-addon2">
+                <input type="text" class="form-control" placeholder="Search songs" aria-label="Search songs">
                 <div class="input-group-append">
                     <button class="btn btn-outline-warning" type="button" onclick="sendRequest()">Search</button>
                 </div>
@@ -38,15 +39,16 @@
         </form>
     </nav>
     <div class="container">
-
         <table class="queueResult table" id="contentTable">
             <thead>
-                <th scope="col">Cover</th>
-                <th scope="col">Info</th>
-                <th scope="col">Likes</th>
-                <th scope="col"></th>
+                <tr>
+                    <th scope="col">Cover</th>
+                    <th scope="col">Info</th>
+                    <th scope="col">Likes</th>
+                    <th scope="col"></th>
+                </tr>
             </thead>
-            <tbody id="tableBod">
+            <tbody id='tableBod'>
 
             </tbody>
         </table>
