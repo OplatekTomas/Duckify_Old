@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Duckify {
     class MimeHelper {
-        public static Dictionary<string,string> Map = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
+        private static Dictionary<string,string> Map = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
 
                 #region Big freaking list of mime types
             
@@ -692,5 +692,8 @@ namespace Duckify {
                 #endregion
 
                 };
+
+        public static string GetMime(string key) => Map.ContainsKey(key) ? Map[key] : "";
+
     }
 }

@@ -133,10 +133,13 @@
     <None Include="SpotifyUWP_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\Files\SpotifyPlayer.html" />
+    <Content Include="Assets\Files\Web\css\style.css" />
+    <Content Include="Assets\Files\Web\img\logo.png" />
+    <Content Include="Assets\Files\Web\index.html" />
+    <Content Include="Assets\Files\Web\scripts\script.js" />
     <Content Include="Assets\IconHighRes.png" />
     <Content Include="Assets\IconHighResWithBackground.png" />
-    <Content Include="Assets\Web\index\index.html" />
-    <Content Include="Assets\Web\SpotifyPlayer.html" />
     <Content Include="Properties\Default.rd.xml" />
     <Content Include="Assets\LockScreenLogo.scale-200.png" />
     <Content Include="Assets\SplashScreen.scale-200.png" />

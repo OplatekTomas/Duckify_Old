@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
@@ -15,7 +16,7 @@ namespace Duckify {
         public static readonly string AssetsWeb = GetAssets().Result;
         public static readonly string Temp = ApplicationData.Current.TemporaryFolder.Path;
 
-        private async static Task<string> GetAssets() => (await Windows.ApplicationModel.Package.Current.InstalledLocation.GetFolderAsync(@"Assets\Web")).Path;
+        private async static Task<string> GetAssets() => (await Windows.ApplicationModel.Package.Current.InstalledLocation.GetFolderAsync(@"Assets\Files")).Path;
 
         static public string EncodeTo64(string toEncode) {
             byte[] toEncodeAsBytes = ASCIIEncoding.ASCII.GetBytes(toEncode);
@@ -38,7 +39,6 @@ namespace Duckify {
             TimeSpan ts = TimeSpan.FromMilliseconds(ms);
             return ts.ToString(@"mm\:ss");
         }
-
 
         public static IPAddress GetMyIP() {
             IPAddress localIP;

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Duckify</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <!-- Popper JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"></script>
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"></script>
+
+    <script src="scripts/script.js"></script>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body onload="init()">
+    <nav class="navbar navbar-dark bg-dark">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="">
+                <img src="img/logo.png" width="30" height="30" class="d-inline-block align-top"></img>
+            </a>
+        </div>
+        <form class="form-inline navbar-form">
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="Search songs" aria-label="Search songs"
+                    aria-describedby="basic-addon2">
+                <div class="input-group-append">
+                    <button class="btn btn-outline-warning" type="button" onclick="sendRequest()">Search</button>
+                </div>
+            </div>
+        </form>
+    </nav>
+    <div class="container">
+
+        <table class="queueResult table" id="contentTable">
+            <thead>
+                <th scope="col">Cover</th>
+                <th scope="col">Info</th>
+                <th scope="col">Likes</th>
+                <th scope="col"></th>
+            </thead>
+            <tbody id="tableBod">
+
+            </tbody>
+        </table>
+    </div>
+
+</body>
+
+</html>

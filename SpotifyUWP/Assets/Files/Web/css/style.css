@@ -1,0 +1,11 @@
+.table td.demo {
+    max-width: 177px;
+}
+
+.table td.demo span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: inline-block;
+    white-space: nowrap;
+    max-width: 100%;
+}
