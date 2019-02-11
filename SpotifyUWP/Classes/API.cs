@@ -49,25 +49,21 @@ namespace Duckify {
                 return null;
             }
             string id = parts["songId"];
+            //Is id already in queue?
             if (!Queue.Q.Select(x => x.Song.Id).Contains(id)) {
                 await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>{
                     await Queue.Add(id, "Track", "");
                 });
-
             } else {
-                for (int i = 0; i < Queue.Q.Count; i++) {
-                    if (Queue.Q[i].Song.Id == id) {
-                        await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => {
-                            Queue.Q[i].Likes++;
-                        });
-                    }
-                }
+                int index;
+                //I only use this for to calculate index of the item I need. Yes I could put the condition inside it but I hate nested stuff.
+                for (index = 0; index < Queue.Q.Count && Queue.Q[index].Song.Id != id; index++) {}
+                await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => {
+                    Queue.Q[index].Likes++;
+                    Queue.Q.BubbleSort();
+                });
             }
-            await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,  () => {
-                Queue.Q.BubbleSort();
-                
-            });
-            return "";
+            return JsonConvert.SerializeObject(true);
         }
 
         public static async Task<string> BuildSearchResponse(string query) {
@@ -80,6 +76,7 @@ namespace Duckify {
             if(results.Tracks == null) {
                 return JsonConvert.SerializeObject(simplifiedResults);
             }
+            //We need to filter out some useless data to save a lot of network traffic
             foreach (var result in results.Tracks.Items) {
                 var song = new Song() {
                     artistName = Helper.BuildListString(result.Artists.Select(x => x.Name)),
@@ -94,8 +91,9 @@ namespace Duckify {
         }
 
         public static string BuildQueueResponse() {
-            var queueTemp = Queue.Q;
+            var queueTemp = Queue.Q.ToList();
             var result = new List<Song>();
+            //Data filtering to save some network traffic.
             foreach (var item in queueTemp) {
                 var song = new Song() {
                     artistName = Helper.BuildListString(item.Song.Artists.Select(x => x.Name)),
@@ -110,6 +108,9 @@ namespace Duckify {
             return JsonConvert.SerializeObject(result);
         }
 
+        /// <summary>
+        /// Splits HTML Query into parts and returns it as dictionary.
+        /// </summary>
         public static Dictionary<string, string> ParseQuery(string query) {
             var parts = query.Split("&");
             var result = new Dictionary<string, string>();
@@ -129,6 +130,11 @@ namespace Duckify {
             WriteTextReponse("{\"apiInfo\":\"If someone is trying to brake the damn API or find some backdoor to it please don't.\"}", response);
         }
 
+        /// <summary>
+        /// Successful response.
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="response"></param>
         private static void WriteTextReponse(string text, HttpListenerResponse response) {
             response.OutputStream.Position = 0;
             StreamWriter sr = new StreamWriter(response.OutputStream);

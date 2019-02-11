@@ -56,14 +56,14 @@ namespace Duckify {
                 for (int j = 1; j <= i; j++) {
                     object o1 = o[j - 1];
                     object o2 = o[j];
-                    if (((IComparable)o1).CompareTo(o2) > 0) {
+                    if (((IComparable)o1).CompareTo(o2) < 0) {
                         o.Remove(o1);
                         o.Insert(j, o1);
                     }
                 }
-            }
-            
+            }        
         }
+
 
         /// <summary>
         /// Tries to convert any single type to any single other type by comparing its properties.

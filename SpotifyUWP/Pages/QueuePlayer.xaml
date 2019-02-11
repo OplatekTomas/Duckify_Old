@@ -11,7 +11,7 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid>
-        <ListView Grid.Row="1" ItemsSource="{x:Bind local:Queue.Q, Mode=TwoWay}" Margin="0,5,0,0" CanDragItems="True" CanReorderItems="True" AllowDrop="True" SelectionMode="Extended" x:Name="ItemList">
+        <ListView Grid.Row="1" ItemsSource="{x:Bind local:Queue.Q, Mode=OneWay}" Margin="0,5,0,0" CanDragItems="True" CanReorderItems="False" AllowDrop="True" SelectionMode="Extended" x:Name="ItemList">
             <ListView.ItemContainerStyle>
                 <Style TargetType="ListViewItem">
                     <Setter Property="HorizontalContentAlignment"  Value="Stretch"></Setter>
@@ -55,7 +55,7 @@
                             <TextBlock Grid.Column="0" Margin="0,0,5,0" Text="{x:Bind Song.Name}" VerticalAlignment="Center" Style="{ThemeResource CaptionTextBlockStyle}"/>
                             <TextBlock Grid.Column="1" Margin="0,0,5,0" Text="{x:Bind BuildListString(Song.Artists)}" VerticalAlignment="Center" Style="{ThemeResource CaptionTextBlockStyle}"/>
                             <TextBlock Grid.Column="2" Margin="7,0,5,0" Text="{x:Bind Length}" VerticalAlignment="Center"  Style="{ThemeResource CaptionTextBlockStyle}"/>
-                            <TextBlock Grid.Column="3" Margin="7,0,5,0" Text="{x:Bind Likes}" VerticalAlignment="Center"  Style="{ThemeResource CaptionTextBlockStyle}"/>
+                            <TextBlock Grid.Column="3" Margin="7,0,5,0" Text="{x:Bind Likes, Mode=OneWay}" VerticalAlignment="Center"  Style="{ThemeResource CaptionTextBlockStyle}"/>
                             <TextBlock Grid.Column="4" Margin="7,0,5,0" Text="{x:Bind AddedBy}" VerticalAlignment="Center" Style="{ThemeResource CaptionTextBlockStyle}"/>
                         </Grid>
                     </Grid>

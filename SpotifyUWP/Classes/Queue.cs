@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -71,22 +72,23 @@ namespace Duckify
 
     }
 
-    public class QueuedItem : IComparable {
+    public class QueuedItem : IComparable, INotifyPropertyChanged {
        public QueuedItem(FullTrack song) {
-            Likes = 0;
+            Likes = 1;
             Song = song;
             Length = Helper.ConvertMsToReadable(song.DurationMs);
         }
         public QueuedItem(FullTrack song, string addedBy) {
-            Likes = 0;
+            Likes = 1;
             Song = song;
             AddedBy = addedBy;
             Length = Helper.ConvertMsToReadable(song.DurationMs);
         }
 
+        private uint _likes;
         public string AddedBy { get; set; } = "Admin";
         public FullTrack Song { get; set; }
-        public uint Likes { get; set; }
+        public uint Likes { get { return _likes; } set { _likes = value; this.PropertyChanged.Invoke(this, new PropertyChangedEventArgs("Likes")); } }
         public string Length { get; set; }
 
         public string BuildListString(IEnumerable<SimpleArtist> items) {
@@ -97,10 +99,19 @@ namespace Duckify
             return result.Remove(result.Length - 2, 2);
         }
 
+        public event PropertyChangedEventHandler PropertyChanged = delegate { };
+        protected void OnPropertyChanged(PropertyChangedEventArgs e) {
+            PropertyChanged(this, e);
+        }
+
+        protected void OnPropertyChanged(string propertyName = null) {
+            OnPropertyChanged(new PropertyChangedEventArgs(propertyName));
+        }
+
         public int CompareTo(object obj) {
             QueuedItem item = (QueuedItem)obj;
             if (item == null) {
-                throw new ArgumentException("Object is not Preson");
+                throw new ArgumentException("Comparing to null ya donut.");
             }
             return this.Likes.CompareTo(item.Likes);
         }

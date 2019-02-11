@@ -21,6 +21,7 @@ namespace Duckify {
         /// Initalize and start the Listener property. Server starts on local network address and port 5850
         /// </summary>
         public static void Init() {
+            //Listener = new HttpListener(Helper.GetMyIP(), 5850);
             Listener = new HttpListener(Helper.GetMyIP(), 5850);
             Listener.Request += async (s, ev) => await HandleRequest(ev);
             Listener.Start();
