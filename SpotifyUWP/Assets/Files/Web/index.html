@@ -31,7 +31,7 @@
         </div>
         <form class="form-inline navbar-form">
             <div class="input-group">
-                <input type="text" class="form-control" placeholder="Search songs" aria-label="Search songs">
+                <input type="text" class="form-control" placeholder="Search songs" id="searchInput" aria-label="Search songs">
                 <div class="input-group-append">
                     <button class="btn btn-outline-warning" type="button" onclick="sendRequest()">Search</button>
                 </div>
@@ -39,6 +39,19 @@
         </form>
     </nav>
     <div class="container">
+        <table class="queueResult table" id="searchResultTable">
+            <thead>
+                <tr>
+                    <th scope="col">Cover</th>
+                    <th scope="col">Info</th>
+                    <th scope="col"></th>
+
+                </tr>
+            </thead>
+            <tbody id='searchTableBod'>
+
+            </tbody>
+        </table>
         <table class="queueResult table" id="contentTable">
             <thead>
                 <tr>

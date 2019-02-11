@@ -36,7 +36,7 @@ namespace Duckify {
             //Check if request is for API or not.
             bool isApi = request.Url.LocalPath.StartsWith("/api");
             if (isApi) {
-                await API.Handle(request.Url.LocalPath, args.Response);
+                await API.Handle(request.Url, args.Response);
             } else {
                 await GetFileResponse(request.Url.LocalPath, args.Response);
             }

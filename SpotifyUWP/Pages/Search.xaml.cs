@@ -71,7 +71,11 @@ namespace Duckify {
         }
 
         private void AddAlbumResults(List<SimpleAlbum> results) {
-            results?.ForEach(x => AlbumsResults.Add(new SearchResult(x.Id, x.Name, Helper.BuildListString(x.Artists.Select(y => y.Name)), x?.Images[0]?.Url)));
+            foreach (var x in results?? new List<SimpleAlbum>()) {
+                if (x?.Images.Count > 0) {
+                    AlbumsResults.Add(new SearchResult(x.Id, x.Name, Helper.BuildListString(x.Artists.Select(y => y.Name)), x?.Images[0]?.Url));
+                }
+            }
             if (!(AlbumsResults.Count > 0)) {
                 var task = AnimationExtensions.Fade(Albums, 0).StartAsync();
                 task.ContinueWith(async (res) => {

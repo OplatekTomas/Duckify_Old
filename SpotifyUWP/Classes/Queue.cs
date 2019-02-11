@@ -44,7 +44,9 @@ namespace Duckify
         }
 
         public async static Task StartPlayback() {
-            var response = await Spotify.Client.ResumePlaybackAsync((await Spotify.GetDevice()).Id,"", new List<string>() { Q[0].Song.Uri }, 0, 0);
+            if (Q.Count > 0) { 
+                var response = await Spotify.Client.ResumePlaybackAsync((await Spotify.GetDevice()).Id,"", new List<string>() { Q[0].Song.Uri }, 0, 0);
+            }
         }
 
         /// <summary>
@@ -69,7 +71,7 @@ namespace Duckify
 
     }
 
-    public class QueuedItem {
+    public class QueuedItem : IComparable {
        public QueuedItem(FullTrack song) {
             Likes = 0;
             Song = song;
@@ -93,6 +95,14 @@ namespace Duckify
                 result += item.Name + ", ";
             }
             return result.Remove(result.Length - 2, 2);
+        }
+
+        public int CompareTo(object obj) {
+            QueuedItem item = (QueuedItem)obj;
+            if (item == null) {
+                throw new ArgumentException("Object is not Preson");
+            }
+            return this.Likes.CompareTo(item.Likes);
         }
     }
 }
